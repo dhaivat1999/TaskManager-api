@@ -13,7 +13,7 @@ const taskSchema = new mongoose.Schema({
     type: Date
   },
   category: String, // Adding category field
-  priority: String // Adding priority field
+  priority: String // Adding priority fieldasdasd
 });
 
 module.exports = mongoose.model('Task', taskSchema);
