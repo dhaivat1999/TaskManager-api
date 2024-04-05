@@ -8,6 +8,7 @@ const EventEmitter = require("node:events");
 const emitter = new EventEmitter();
 const passport = require("passport");
 const session = require("express-session");
+const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -25,8 +26,10 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // Routes
-app.use("/tasks", isLoggedIn, taskRoutes);
+app.use("/tasks", taskRoutes);
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
