@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const taskSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -12,8 +13,16 @@ const taskSchema = new mongoose.Schema({
   targetCompletionDate: {
     type: Date
   },
-  category: String, // Adding category field
-  priority: String // Adding priority fieldasdasd
+  status: {
+    type:String,
+    default: 'In Complete'
+  },
+  category: String,
+  priority: String,
+  creationDate: {
+    type: Date,
+    default: Date.now 
+  }
 });
 
 module.exports = mongoose.model('Task', taskSchema);

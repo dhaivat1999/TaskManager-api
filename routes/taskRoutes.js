@@ -1,6 +1,6 @@
 // routes/taskRoutes.js
 const express = require('express');
-const Task = require('../models/Task');
+const Task = require('../models/Task'); 
 const router = express.Router();
 
 
@@ -21,7 +21,8 @@ router.post('/', async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     category: req.body.category, // Add category field
-    priority: req.body.priority // Add priority field
+    priority: req.body.priority, // Add priority field
+    targetCompletionDate : req.body.targetCompletionDate,
   });
 
   try {

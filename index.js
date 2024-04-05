@@ -1,29 +1,33 @@
-// index.js
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const taskRoutes = require("./routes/taskRoutes");
 const authRoutes = require("./routes/authRoutes");
-const EventEmitter = require("node:events");
-const emitter = new EventEmitter();
-const passport = require("passport");
-const session = require("express-session");
 const userRoutes = require("./routes/userRoutes");
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
-}
+const uri = "mongodb+srv://dhaivat:desai123@taskmanager.icxb7nq.mongodb.net/?retryWrites=true&w=majority";
+const corsOptions = {
+  origin: 'http://localhost:5173/',//(https://your-client-app.com)
+  optionsSuccessStatus: 200,
+};
 
 app.use(bodyParser.json());
+app.use(cors());
+const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(uri);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1); // Exit the process if unable to connect to MongoDB
+  }
+};
 
 // Connect to MongoDB
-mongoose.connect(
-  "mongodb+srv://dhaivat:dhaivat123@taskmanager.xpkggk6.mongodb.net/task-manager-db?retryWrites=true&w=majority&appName=TaskManager"
-);
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+connectToDatabase();
 
 // Routes
 app.use("/tasks", taskRoutes);
