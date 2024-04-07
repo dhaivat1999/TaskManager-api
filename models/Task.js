@@ -13,10 +13,6 @@ const taskSchema = new mongoose.Schema({
   targetCompletionDate: {
     type: Date
   },
-  status: {
-    type:String,
-    default: 'In Complete'
-  },
   category: String,
   priority: String,
   creationDate: {

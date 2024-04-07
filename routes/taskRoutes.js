@@ -14,7 +14,19 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a new task
+//Get a Single Task based on the ID of the task
+router.get('/:id', async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Create a new task
 router.post('/', async (req, res) => {
   const task = new Task({
@@ -35,33 +47,42 @@ router.post('/', async (req, res) => {
 
 
 // Update a task
-router.patch('/:id', async (req, res) => {
-  try {
-    const task = await Task.findById(req.params.id);
-    if (task == null) {
-      return res.status(404).json({ message: 'Task not found' });
+  router.patch('/:id', async (req, res) => {
+    try {
+      const task = await Task.findById(req.params.id);
+      if (task == null) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
+      
+      // Update fields if provided in request body
+      if (req.body.title != null) {
+        task.title = req.body.title;
+      }
+      if (req.body.description != null) {
+        task.description = req.body.description;
+      }
+      if (req.body.completed != null) {
+        task.completed = req.body.completed;
+      }
+      if (req.body.category != null) {
+        task.category = req.body.category;
+      }
+      if (req.body.priority != null) {
+        task.priority = req.body.priority;
+      }
+      if(req.body.targetCompletionDate != null) {
+        task.targetCompletionDate = req.body.targetCompletionDate;
+      }
+      if(req.body.completed != null) {
+        task.completed = req.body.completed;
+      }
+      
+      const updatedTask = await task.save();
+      res.json(updatedTask);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
     }
-    if (req.body.title != null) {
-      task.title = req.body.title;
-    }
-    if (req.body.description != null) {
-      task.description = req.body.description;
-    }
-    if (req.body.completed != null) {
-      task.completed = req.body.completed;
-    }
-    if (req.body.category != null) { // Update category if provided
-      task.category = req.body.category;
-    }
-    if (req.body.priority != null) { // Update priority if provided
-      task.priority = req.body.priority;
-    }
-    const updatedTask = await task.save();
-    res.json(updatedTask);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+  });
 
 // Delete a task
 router.delete('/:id', async (req, res) => {
